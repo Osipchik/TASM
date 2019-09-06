@@ -4,7 +4,7 @@ model small
 a dw 5
 b dw 6
 c dw 7
-d dw 23
+d dw 2
 .code
 
 start:
@@ -14,37 +14,42 @@ start:
  MOV AX, a
  MOV BX, b
  MOV CX, c
- MOV DX, d
 
- SHL AX, 1        ; AX = a << 1
-
+ MUL AX           ; AX = a * a
  XOR BX, CX
+
+ MOV DX, d
  XOR BX, DX
 
  CMP AX, BX
  JE IsEqual
-    MOV BX, b
-    AND CX, BX    ; CX = c & b
-    MOV AX, a
-    ADD CX, AX    ; AX = CX + a
-    JMP Finish
+;OK
+ MOV BX, b
+
+ AND CX, BX       ; CX = c & b
+
+ MOV AX, a
+
+ ADD AX, CX       ; AX = CX + a
+ JMP Finish
 IsEqual:
  MOV CX, c
  ADD CX, 101b     ; CX = c + 5
- SHR AX, 1        ; a = AX >> 1
+ MOV AX, a
  CMP CX, AX       ; c + 5 == a
  JE IsTrue
-    MOV CX, c
-    AND AX, CX    ; AX = a & c
-    OR AX, DX     ; AX = AX | d
-    JMP Finish
-IsTrue:
-    MOV AX, a
-    MOV BX, b
-    MUL BX    ; DX:AX = a * b, DX = NULL
-    XOR CX, 100b  ; CX = c ^ 4
-    ADD AX, CX    ; AX = a * b + CX
 
+ MOV CX, c
+ AND AX, CX       ; AX = a & c
+ OR AX, DX        ; AX = AX | d
+
+ JMP Finish
+IsTrue:
+ MOV AX, a
+ MOV BX, b
+ MUL BX           ; DX:AX = a * b, DX = NULL
+ XOR CX, 100b     ; CX = c ^ 4
+ ADD AX, CX       ; AX = a * b + CX
 Finish:
 
  MOV AH, 4Ch
