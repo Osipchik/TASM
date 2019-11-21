@@ -21,7 +21,7 @@ input PROC
     MOV AH, 01h
     INT 21h
     MOV AH, 0
-    CMP AL, 10
+    CMP AL, 13
         JZ cycleBreak
     CMP AL, ' '
         JZ cycleBreak
@@ -49,6 +49,7 @@ inputMatrix PROC
     DEC arraySize
     CMP arraySize, 0
  JNZ matrixInputCycle
+ RET
 inputMatrix ENDP
 ;-------------------------------------
 rotateMatrix PROC
@@ -65,6 +66,7 @@ rotateMatrix PROC
     MOV tempCol, DX             ; сохранили остаток
     XOR AX, AX
     XOR DX, DX
+
     MOV DX, initialArray[SI]    ; сохраняем цифру
     MOV tempVal, DX
     MOV AX, rowLength
@@ -85,7 +87,7 @@ rotateMatrix PROC
     MOV AX, tempVal
     MOV resultingArray[BX], AX  ; вставляем число в нужную позицию
 
-    SUB SI, containerSize
+    ADD SI, containerSize
     POP CX
  LOOP cycleRotate
  RET
